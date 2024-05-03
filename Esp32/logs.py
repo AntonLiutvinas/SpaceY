@@ -3,7 +3,6 @@ import os
 from funcs import *
 from lora_e220 import LoRaE220, Configuration
 
-
 class log:
     def InitSd(self):
         try:
@@ -57,7 +56,22 @@ class log:
         return "{tim}|e|{er}".format(tim=GetTime(), er=e)
 
     def ErrorLog(self, msg):
-        print(self.Error(msg))
+        msg = self.Error(msg)
+        try:
+            file = open("/sd/{}".format(self.FILE),"a")
+            file.write("{tim}|d|{ms}\n".format(tim=GetTime(), ms=msg))
+            file.close()
+        except Exception:
+            pass
+        try:
+            self.lora.write('{:04d}'.format(len(msg)).encode())
+            self.lora.write(msg.encode())
+        except Exception:
+            pass
+        try:
+            print(msg)
+        except Exception:
+            pass
 
     def WriteSd(self, msg):
         try:
