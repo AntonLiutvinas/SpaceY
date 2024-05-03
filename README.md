@@ -31,7 +31,7 @@
 - dht 11:
     - vin-3v3
     - gnd-gnd
-    - data-5
+    - data-6
 - bmp 280:
     - gnd-gnd
     - sda-4

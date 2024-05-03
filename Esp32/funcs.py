@@ -26,7 +26,14 @@ class sensors:
         except Exception as e:
             self.Log.ErrorLog(e)
 
-    def getPositionData(self):
+    def GetSenorData(self):
+        try:
+            return (self.GetBmp(), self.GetBio(), self.GetPositionData(), self.Tilt())
+        except Exception as e:
+            self.Log.ErrorLog(e)
+            return (("e", "e"), ("e", "e"), 0)
+
+    def GetPositionData(self):
         timeout = time.time() + 8   # 8 seconds from now
         try:
             while True:
