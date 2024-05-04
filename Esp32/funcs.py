@@ -28,10 +28,16 @@ class sensors:
 
     def GetSenorData(self):
         try:
-            return (self.GetBmp(), self.GetBio(), self.GetPositionData(), self.Tilt())
+            # pr:pressure, al:altitude, te:temperature, hu:humidity, la:latitude, lo:longitude, sa:satellites, pi:pitch, ro:roll
+            bmp_data = self.GetBmp()
+            bio_data = self.GetBio()
+            position_data = self.GetPositionData()
+            tilt_data = self.Tilt()
+
+            return f"pr:{bmp_data[0]},al:{bmp_data[1]},te:{bio_data[0]},hu:{bio_data[1]},la:{position_data[0]},lo:{position_data[1]},sa:{position_data[2]},pi:{tilt_data[0]},ro:{tilt_data[1]}"
         except Exception as e:
             self.Log.ErrorLog(e)
-            return (("e", "e"), ("e", "e"), 0)
+            return "pr:e,al:e,te:e,hu:e,la:e,lo:e,sa:e,pi:e,ro:e"
 
     def GetPositionData(self):
         timeout = time.time() + 8   # 8 seconds from now

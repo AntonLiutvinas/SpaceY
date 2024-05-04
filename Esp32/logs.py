@@ -33,6 +33,7 @@ class log:
         self.lora = loraUart
         self.loraConfig = loraConfig
         self.channel = channel
+        self.Code = 0
         i = 0
         code = 0
         while i < 3:
@@ -54,6 +55,24 @@ class log:
 
     def Error(self, e):
         return "{tim}|e|{er}".format(tim=GetTime(), er=e)
+
+    def Info(self, msg):
+        return "{tim}|i|{ms}".format(tim=GetTime(), ms=msg)
+    
+    def Data(self, msg):
+        return "{tim}|d|{ms}".format(tim=GetTime(), ms=msg)
+    
+    def InfoLog(self, msg):
+        msg = self.Info(msg)
+        self.WriteSd(msg)
+        self.WriteLora(msg)
+        print(msg)
+    
+    def DataLog(self, msg):
+        msg = self.Data(msg)
+        self.WriteSd(msg)
+        self.WriteLora(msg)
+        print(msg)
 
     def ErrorLog(self, msg):
         msg = self.Error(msg)
@@ -106,7 +125,8 @@ class log:
         try:
             length = self.lora.read(4)
             if length != None:
-                return self.lora.read(int(length.decode())).decode()
+                self.Code = self.lora.read(int(length.decode())).decode()
+                return 1
             return 0
         except Exception as e:
             self.ErrorLog(e)

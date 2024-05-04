@@ -22,14 +22,29 @@ def Initial():
                      UART(1, baudrate=9600, tx=Pin(8), rx=Pin(9)), #gps uart
                      Log #Log
                      )
-        
-        
+
 # Main loop
 def Main():
     On = true
     while On:
         try:
-            Log.DataLog(Sensor.getPositionData())
+            # Format Senor data
+            Log.DataLog(Sensor.GetSenorData())
+            
+            # Read Lora
+            if Log.ReadLora() != 0:
+                Log.InfoLog("Receaved code: {}".format(Log.Code))
+                if Log.Code == "end":
+                    Log.InfoLog("End")
+                    On = false
+                    break
+                elif Log.Code == "reset":
+                    Initial()
+                    Log.InfoLog("Reset")
+                else:
+                    Log.InfoLog("Unknown code")
+                
+            # End of the main loop
             time.sleep(0.2)
         except KeyboardInterrupt:
             On = false
