@@ -31,7 +31,7 @@
 - dht 11:
     - vin-3v3
     - gnd-gnd
-    - data-5
+    - data-6
 - bmp 280:
     - gnd-gnd
     - sda-4
@@ -48,3 +48,4 @@
 - change pins to ones set
 - code bn880
 - rename to pico
+- nuh huh
