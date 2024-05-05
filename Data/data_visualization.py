@@ -1,7 +1,9 @@
 import matplotlib.pyplot as plt
 from datetime import datetime
+import os 
 
-# Function to parse data from a line
+dir_path = os.path.dirname(os.path.realpath(__file__))
+
 def parse_data(line):
     data = line.split("|")[2].split(",")
     parsed_data = {}
@@ -13,8 +15,8 @@ def parse_data(line):
             parsed_data[key] = float(value) if value != 'e' else None
     return parsed_data
 
-# Read data from file
-with open('data.txt', 'r') as file:
+path = os.path.join(dir_path, input("Enter the file name: "))
+with open(path, 'r') as file:
     lines = file.readlines()
 
 # Get the start time
