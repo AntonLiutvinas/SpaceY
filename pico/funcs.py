@@ -34,35 +34,35 @@ class sensors:
             bio_data = self.GetBio()
             position_data = self.GetPositionData()
             tilt_data = self.Tilt()
-            return f"pr:{bmp_data[0]},al:{bmp_data[1]},te:{bio_data[0]},hu:{bio_data[1]},la:{position_data[0]},lo:{position_data[1]},sa:{position_data[2]},pi:{tilt_data[0]},ro:{tilt_data[1]}"
+            return f"pr:{bmp_data[0]},al:{bmp_data[1]},te:{bio_data[0]},hu:{bio_data[1]},la:{position_data[0]},lo:{position_data[1]},pi:{tilt_data[0]},ro:{tilt_data[1]}"
         except Exception as e:
-            print("ASDASDASDASD")
             self.Log.ErrorLog(e)
-            return "pr:e,al:e,te:e,hu:e,la:e,lo:e,sa:e,pi:e,ro:e"
+            return "pr:e,al:e,te:e,hu:e,la:e,lo:e,pi:e,ro:e"
 
     def GetPositionData(self):
-        timeout = time.time() + 8   # 8 seconds from now
+        timeout = time.time() + 1   # 8 seconds from now
         try:
             while True:
-                self.gps.readline()
-                buff = str(self.gps.readline())
-                parts = buff.split(',')
-                if (parts[0] == "b'$GPGGA" and len(parts) == 15):
-                    if(parts[1] and parts[2] and parts[3] and parts[4] and parts[5] and parts[6] and parts[7]):
-                        latitude = self.convertToDigree(parts[2])
-                        if (parts[3] == 'S'):
-                            latitude = -latitude
-                        longitude = self.convertToDigree(parts[4])
-                        if (parts[5] == 'W'):
-                            longitude = -longitude
-                        satellites = parts[7]
-                        return (latitude, longitude, satellites)
+                data1 = self.gps.read().decode().split('$GNGGA')
+                if len(data1) >= 2:
+                    data2 = data1[1].split(",")
+                    if data2[2] and data2[3] and data2[4] and data2[5]:
+                        if data2[3] == "S":
+                            lat = -self.convertToDigree(data2[2])
+                        else:
+                            lat = self.convertToDigree(data2[2])
+                        if data2[5] == "W":
+                            lon = -self.convertToDigree(data2[4])
+                        else:
+                            lon = self.convertToDigree(data2[4])
+                        return (lat, lon)
+
                 if (time.time() > timeout):
                     print(setelites)
-                    return ("e", "e", "e")
+                    return ("e", "e")
         except Exception as e:
             #self.Log.ErrorLog(e)
-            return ("e", "e", "e")
+            return ("e", "e")
         
     def convertToDigree(self, RawDegrees):
         try:
@@ -135,7 +135,9 @@ class sensors:
             return (0, 90)
     
 
+import utime
+
 def GetTime():
-    current_time = time.localtime()
+    current_time = utime.localtime()
     formatted_time = "{:02d}-{:02d}-{:02d}".format(current_time[3], current_time[4], current_time[5])
     return formatted_time

@@ -2,6 +2,7 @@ import sdcard
 import os
 from funcs import *
 from lora_e220 import LoRaE220, Configuration
+import urandom
 
 class log:
     def InitSd(self):
@@ -9,6 +10,7 @@ class log:
             sd=sdcard.SDCard(self.spi, self.sdp)
             vfs=os.VfsFat(sd)
             os.mount(sd,'/sd')
+            self.FILE = "Logs-({}).txt".format(len(os.listdir('/sd')))
             file = open("/sd/{}".format(self.FILE),"w")
             file.close()
             return 1
@@ -27,7 +29,7 @@ class log:
             return e
 
     def __init__(self, spi, sdp, loraUart, loraConfig, channel):
-        self.FILE = "Logs-{}.txt".format(GetTime())
+        self.FILE = "Logs-{}.txt".format(str(urandom.randint(0, 10000000)))
         self.spi = spi
         self.sdp = sdp
         self.lora = loraUart

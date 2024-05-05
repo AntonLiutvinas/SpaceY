@@ -2,7 +2,6 @@ from machine import Pin, SPI, SoftSPI, UART, SoftI2C
 from logs import *
 from funcs import *
 import time
- 
 
 # magic
 true = True
@@ -23,13 +22,14 @@ def Initial():
                      Log #Log
                      )
 
+
 # Main loop
 def Main():
     On = true
     while On:
         try:
-            # Format Senor data
             Log.DataLog(Sensor.GetSensorData())
+            time.sleep(1)
             
             # Read Lora
             # if Log.ReadLora() != 0:
@@ -50,8 +50,8 @@ def Main():
             On = false
             Log.InfoLog("Keyboard Interrupt")
             break
-        # except Exception as e:
-        #     Log.ErrorLog("Fatal Error: {}".format(e))
+        except Exception as e:
+             Log.ErrorLog("Fatal Error: {}".format(e))
 # Initial function
 Initial()
 # Wait for 1 second
