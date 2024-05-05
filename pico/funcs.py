@@ -11,6 +11,7 @@ class sensors:
         self.Log = Log
         try:
             init_mpu6050(self.i2c)
+            self.mpu = self.i2c
         except Exception as e:
             Log.ErrorLog(e)
         try:
@@ -33,9 +34,9 @@ class sensors:
             bio_data = self.GetBio()
             position_data = self.GetPositionData()
             tilt_data = self.Tilt()
-
             return f"pr:{bmp_data[0]},al:{bmp_data[1]},te:{bio_data[0]},hu:{bio_data[1]},la:{position_data[0]},lo:{position_data[1]},sa:{position_data[2]},pi:{tilt_data[0]},ro:{tilt_data[1]}"
         except Exception as e:
+            print("ASDASDASDASD")
             self.Log.ErrorLog(e)
             return "pr:e,al:e,te:e,hu:e,la:e,lo:e,sa:e,pi:e,ro:e"
 
@@ -83,7 +84,7 @@ class sensors:
             altitude = 44330 * (1.0 - (pressure / 1013.25) ** 0.1903)
             return (pressure, altitude)
         except Exception as e:
-            # self.Log.ErrorLog(e)
+            #self.Log.ErrorLog(e)
             return ("e", "e")
 
     def GetBio(self):
@@ -95,11 +96,8 @@ class sensors:
             return ("e", "e")
 
     def RawDataG(self):
-        try:
-            return get_mpu6050_data(self.mpu)
-        except Exception as e:
-            # self.Log.ErrorLog(e)
-            return 0
+        return get_mpu6050_data(self.mpu)
+        
         
     def Accel(self):
         try:
