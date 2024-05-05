@@ -58,9 +58,10 @@ class sensors:
                         satellites = parts[7]
                         return (latitude, longitude, satellites)
                 if (time.time() > timeout):
+                    print(setelites)
                     return ("e", "e", "e")
         except Exception as e:
-            # self.Log.ErrorLog(e)
+            #self.Log.ErrorLog(e)
             return ("e", "e", "e")
         
     def convertToDigree(self, RawDegrees):
@@ -73,7 +74,7 @@ class sensors:
             Converted = '{0:.6f}'.format(Converted) # to 6 decimal places
             return str(Converted)
         except Exception as e:
-            # self.Log.ErrorLog(e)
+            #self.Log.ErrorLog(e)
             return "e"
 
     def GetBmp(self):
@@ -81,8 +82,9 @@ class sensors:
             self.bmp.normal_measure()
             pressure = self.bmp.pressure
             pressure /= 100
-            altitude = 44330 * (1.0 - (pressure / 1013.25) ** 0.1903)
-            return (pressure, altitude)
+            sea_level_pressure_hpa = 1011  # Sea level pressure in hPa
+            altitude_m = 44330 * (1 - (pressure / sea_level_pressure_hpa) ** (1 / 5.255))
+            return (pressure, altitude_m)
         except Exception as e:
             #self.Log.ErrorLog(e)
             return ("e", "e")

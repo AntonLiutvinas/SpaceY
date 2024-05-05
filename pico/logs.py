@@ -95,7 +95,7 @@ class log:
     def WriteSd(self, msg):
         try:
             file = open("/sd/{}".format(self.FILE),"a")
-            file.write("{tim}|d|{ms}\n".format(tim=GetTime(), ms=msg))
+            file.write("{}\n".format(msg))
             file.close()
             return 1
         except Exception as e:
@@ -131,3 +131,4 @@ class log:
         except Exception as e:
             self.ErrorLog(e)
             return 0
+
