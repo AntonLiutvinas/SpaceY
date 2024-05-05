@@ -59,7 +59,7 @@ class sensors:
                 if (time.time() > timeout):
                     return ("e", "e", "e")
         except Exception as e:
-            self.Log.ErrorLog(e)
+            # self.Log.ErrorLog(e)
             return ("e", "e", "e")
         
     def convertToDigree(self, RawDegrees):
@@ -72,7 +72,7 @@ class sensors:
             Converted = '{0:.6f}'.format(Converted) # to 6 decimal places
             return str(Converted)
         except Exception as e:
-            self.Log.ErrorLog(e)
+            # self.Log.ErrorLog(e)
             return "e"
 
     def GetBmp(self):
@@ -83,7 +83,7 @@ class sensors:
             altitude = 44330 * (1.0 - (pressure / 1013.25) ** 0.1903)
             return (pressure, altitude)
         except Exception as e:
-            self.Log.ErrorLog(e)
+            # self.Log.ErrorLog(e)
             return ("e", "e")
 
     def GetBio(self):
@@ -91,14 +91,14 @@ class sensors:
             self.dht11.measure()
             return (self.dht11.temperature(), self.dht11.humidity())
         except Exception as e:
-            self.Log.ErrorLog(e)
+            # self.Log.ErrorLog(e)
             return ("e", "e")
 
     def RawDataG(self):
         try:
             return get_mpu6050_data(self.mpu)
         except Exception as e:
-            self.Log.ErrorLog(e)
+            # self.Log.ErrorLog(e)
             return 0
         
     def Accel(self):
@@ -109,7 +109,7 @@ class sensors:
             data['z'] = round(data['z']+0.20, 1)
             return data
         except Exception as e:
-            self.Log.ErrorLog(e)
+            # self.Log.ErrorLog(e)
             return 0
     
     def Tilt(self):
